@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const appelOffreSchema = new mongoose.Schema({
+  User: { type: String, required: true },
   Type_Appel_Offre: { type: String, required: true },
   Titre: { type: String, required: true },
   Expression_Besoin: { type: String, required: true },
