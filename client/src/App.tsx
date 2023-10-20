@@ -6,6 +6,10 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Navigation from './components/Navigation';
 import AddAppelOffre from './components/AddAppelOffre';
+import ClientDashboard from './components/ClientDashboard';
+
+
+
 
 
 
@@ -21,6 +25,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/addAppelOffre" element={<AddAppelOffre />} />
+          <Route path="/clientDashboard" element={<ClientDashboard />} />
+
+
         </Routes>
       </div>
     </Router>

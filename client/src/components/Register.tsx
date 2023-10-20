@@ -2,20 +2,13 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
 
-interface FormData {
-  username: string;
-  email: string;
-  password: string;
-  role: string;
-}
-
 const Register: React.FC = () => {
   const { setUser } = useUser();
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
-    role: 'demandeur', 
+    role: 'demandeur',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -25,24 +18,25 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post<FormData>('http://localhost:5000/auth/register', {
+      const response = await axios.post('http://localhost:5000/auth/register', {
         username: formData.username,
         email: formData.email,
         password: formData.password,
-        role: formData.role, 
+        role: formData.role,
       });
 
-          // Update the user context
-    setUser({
+      // Update the user context including the 'token'
+      setUser({
         username: response.data.username,
-        role: response.data.role
+        role: response.data.role,
+        token: response.data.token, // Add 'token' property
       });
-  
-      console.log(response.data); // Handle success (redirect, display a message, etc.)
-      window.location.href = '/login'; // Redirect to the login page
+
+      console.log(response.data);
+      window.location.href = '/login';
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error(error.response?.data); // Handle error
+        console.error(error.response?.data);
       }
     }
   };

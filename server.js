@@ -25,10 +25,15 @@ const visitesAppelOffreRouter = require('./controllers/visitesAppelOffre');
 const visitesLieuxRouter = require('./controllers/visitesLieux');
 const workflowApprobationAppelOffreRoutes = require('./controllers/workflowApprobationAppelOffre');
 const echangesConcurrentsRoutes = require('./controllers/echangesConcurrents');
+const clientDashboardRouter = require('./controllers/clientDashboard');
+
+const authVerifyRoute = require('./controllers/authVerify'); // Adjust the path as needed
+
 // Middleware
 app.use(express.json());
 
 // Routes
+app.use('/auth', authVerifyRoute); 
 app.use('/auth', authRoutes);
 app.use('/appelsOffres', appelsOffresRouter);
 app.use('/documentsAppelOffre', documentsAppelOffreRouter);
@@ -42,6 +47,8 @@ app.use('/visitesAppelOffre', visitesAppelOffreRouter);
 app.use('/visitesLieux', visitesLieuxRouter);
 app.use('/workflowApprobationAppelOffre', workflowApprobationAppelOffreRoutes);
 app.use('/echangesConcurrents' , echangesConcurrentsRoutes);
+app.use('/clientDashboard', clientDashboardRouter);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

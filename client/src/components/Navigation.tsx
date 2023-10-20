@@ -16,11 +16,11 @@ const Navigation: React.FC = () => {
     <nav className="navbar navbar-expand navbar-dark bg-dark">
       <div className="container">
         <Link to="/" className="navbar-brand">
-          Appel d'Offres
+          Gestion des Appels d'Offres
         </Link>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav ms-auto">
-            {user ? (
+            {user && user.token ?  (
               <>
                 <li className="nav-item">
                   <span className="nav-link">
@@ -34,6 +34,13 @@ const Navigation: React.FC = () => {
                     </Link>
                   </li>
                 )}
+                {['demandeur', 'concurrent'].includes(user.role) && (
+                  <li className="nav-item">
+                    <Link to="/clientDashboard" className="nav-link">
+                      Dashboard
+                    </Link>
+                  </li>
+                )}
                 <li className="nav-item">
                   <a href="#" className="nav-link text-danger" onClick={handleLogout}>
                     Logout
@@ -43,14 +50,18 @@ const Navigation: React.FC = () => {
             ) : (
               <>
                 <li className="nav-item">
-                  <Link to="/login" className="nav-link">
-                    Login
-                  </Link>
+           
+                    <Link to="/login" className="nav-link">
+                      Login
+                    </Link>
+            
                 </li>
                 <li className="nav-item">
-                  <Link to="/register" className="nav-link">
-                    Register
-                  </Link>
+            
+                    <Link to="/register" className="nav-link">
+                      Register
+                    </Link>
+                  
                 </li>
               </>
             )}

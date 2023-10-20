@@ -1,9 +1,8 @@
 const bcrypt = require('bcrypt');
+const logger = require('./logger');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 require('dotenv').config();
-
-const JWT_SECRET = process.env.JWT_SECRET;
 
 const authController = {
   register: async (req, res) => {
@@ -35,9 +34,11 @@ const authController = {
       res.status(500).json({ message: 'Internal Server Error' });
     }
   },
-  
+
   login: async (req, res) => {
     try {
+      logger.info('Inside login controller');
+
       console.log('Inside login controller'); 
       const { email, password } = req.body;
   
@@ -51,18 +52,44 @@ const authController = {
         return res.status(400).json({ message: 'Invalid credentials' });
       }
   
-      const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
+      // Generate a user-specific JWT secret
+      const userSecret = process.env.JWT_SECRET;
+      
+      // Use the user-specific secret to sign the JWT token
+      const token = jwt.sign({ id: user._id, role: user.role }, userSecret, { expiresIn: '1h' });
+  
+      // Save the user ID and token to local storage
       res.json({
         token,
         username: user.username,
-        role: user.role
+        role: user.role,
+        id: user._id, // Include the user ID in the response
       });
     } catch (error) {
+      logger.error(`Error during login: ${error}`);
+
       console.error('Error during login:', error);
       res.status(500).json({ message: 'Internal Server Error' });
     }
-  }
+  },
   
+
+  getUserById: async (req, res) => {
+    try {
+      const { userId } = req.params; // Assuming the userId is provided as a request parameter
+
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.json(user);
+    } catch (error) {
+      console.error('Error fetching user by ID:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
 };
 
 module.exports = authController;

@@ -8,4 +8,7 @@ router.post('/register', authControllers.register);
 // Login route
 router.post('/login', authControllers.login);
 
+// Get user by ID route
+router.get('/:userId', authControllers.getUserById);
+
 module.exports = router;
